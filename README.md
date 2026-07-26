@@ -162,7 +162,20 @@ python3 --version
 
 Python 3.9 or newer is required.
 
-Run the project:
+### Run the Web UI (Recommended)
+
+To launch the beautiful, interactive game interface:
+
+```bash
+python3 server.py
+```
+
+Then open your browser to `http://localhost:8000`. 
+This uses Python's built-in `http.server` and has zero third-party dependencies.
+
+### Run the Terminal CLI
+
+If you prefer the command-line output:
 
 ```bash
 python3 main.py
@@ -321,6 +334,7 @@ python3 main.py --start "8 7 6 5 4 3 2 1 x"
 |-- SKS2-01_2026.EN.pdf
 |-- main.py
 |-- pyproject.toml
+|-- server.py
 |-- presentation/
 |   `-- README.md
 |-- src/
@@ -331,9 +345,13 @@ python3 main.py --start "8 7 6 5 4 3 2 1 x"
 |       |-- cli.py
 |       |-- heuristics.py
 |       `-- search.py
-`-- tests/
-    |-- test_board.py
-    `-- test_search.py
+|-- tests/
+|   |-- test_board.py
+|   `-- test_search.py
+`-- web/
+    |-- game.js
+    |-- index.html
+    `-- style.css
 ```
 
 ### Root Files
@@ -343,6 +361,7 @@ python3 main.py --start "8 7 6 5 4 3 2 1 x"
 | `README.md` | Full project documentation. |
 | `SKS2-01_2026.EN.pdf` | Original assignment PDF. |
 | `main.py` | Direct launcher used when running `python3 main.py`. |
+| `server.py` | Web API server for the interactive simulation UI. |
 | `pyproject.toml` | Python package configuration. |
 
 ### `src/sliding_puzzle/`
@@ -372,15 +391,20 @@ The tests use Python's built-in `unittest` framework.
 This folder is reserved for later presentation material. Its README gives a
 suggested structure for the 10-minute talk.
 
+### `web/`
+
+The frontend HTML, CSS, and JS files for the interactive web simulation.
+It communicates with `server.py` to retrieve paths and metrics, leaving all core algorithm files completely untouched.
+
 ## Code Architecture
 
-The code is split into four main responsibilities:
+The code is split into five main responsibilities:
 
 1. `board.py` knows what a puzzle state is and how states connect.
 2. `heuristics.py` estimates how far a state is from the target.
 3. `search.py` searches through possible states and records metrics.
-4. `cli.py` connects user input, puzzle construction, search execution, and
-   printed output.
+4. `cli.py` connects user input, puzzle construction, search execution, and printed output.
+5. **Web UI & Server (`web/` & `server.py`)**: Provides a beautiful, interactive simulation. The frontend handles animation while `server.py` acts as a bridge, forwarding states directly to the untouched `search.py` algorithms to fetch solutions dynamically.
 
 The normal execution flow is:
 
