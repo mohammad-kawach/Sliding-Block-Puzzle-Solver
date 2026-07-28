@@ -19,14 +19,11 @@ Python standard-library data structures.
 - [Assignment Puzzle](#assignment-puzzle)
 - [Expected Output](#expected-output)
 - [How To Run](#how-to-run)
-- [Optional Installation](#optional-installation)
-- [Command-Line Usage](#command-line-usage)
 - [Folder Structure](#folder-structure)
 - [Code Architecture](#code-architecture)
 - [Detailed File And Function Reference](#detailed-file-and-function-reference)
 - [How The Algorithms Work](#how-the-algorithms-work)
 - [Metrics Explained](#metrics-explained)
-- [Tests](#tests)
 - [Assignment Compliance](#assignment-compliance)
 - [Troubleshooting](#troubleshooting)
 - [Presentation Notes](#presentation-notes)
@@ -175,156 +172,22 @@ This uses Python's built-in `http.server` and has zero third-party dependencies.
 
 ### Run the Terminal CLI
 
-If you prefer the command-line output:
+If you prefer the command-line output, you can run both algorithms at once, or run them individually:
 
 ```bash
+# Run both algorithms (default)
 python3 main.py
+
+# Run ONLY Breadth-First Search
+python3 main.py bfs
+
+# Run ONLY A* Search
+python3 main.py astar
+
+# To also print the full solution path, add 'show'
+python3 main.py show
+python3 main.py astar show
 ```
-
-On Windows PowerShell:
-
-```powershell
-py -3 main.py
-```
-
-The project has no third-party runtime dependencies.
-
-## Optional Installation
-
-The project can be run directly through `main.py`. Installing it is optional.
-Installation is useful if you want to run the package command
-`sliding-puzzle` or run tests without setting `PYTHONPATH`.
-
-Create a virtual environment:
-
-```bash
-python3 -m venv .venv
-```
-
-Activate it on macOS/Linux:
-
-```bash
-source .venv/bin/activate
-```
-
-Activate it on Windows PowerShell:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
-
-Install the project in editable mode:
-
-```bash
-python3 -m pip install -e .
-```
-
-Windows PowerShell:
-
-```powershell
-py -3 -m pip install -e .
-```
-
-After installation, the command below is also available:
-
-```bash
-sliding-puzzle
-```
-
-## Command-Line Usage
-
-The command-line interface is implemented in
-`src/sliding_puzzle/cli.py`.
-
-### Run Both Algorithms
-
-This is the default:
-
-```bash
-python3 main.py
-```
-
-Equivalent explicit command:
-
-```bash
-python3 main.py --algorithm all
-```
-
-### Run Only BFS
-
-```bash
-python3 main.py --algorithm bfs
-```
-
-### Run Only A*
-
-```bash
-python3 main.py --algorithm astar
-```
-
-### Show The Full Solution Path
-
-```bash
-python3 main.py --show-path
-```
-
-This prints every board state from the start state to the target state.
-
-### Choose An A* Heuristic
-
-```bash
-python3 main.py --algorithm astar --heuristic manhattan
-python3 main.py --algorithm astar --heuristic misplaced
-python3 main.py --algorithm astar --heuristic zero
-```
-
-Available heuristic names:
-
-- `manhattan`: default; sum of tile distances from current positions to target
-  positions.
-- `misplaced`: counts non-blank tiles that are not in their target positions.
-- `zero`: always returns `0`; useful for testing A* behavior.
-
-### Use A Custom Puzzle
-
-```bash
-python3 main.py \
-  --start "8 7 6 5 4 3 2 1 0" \
-  --target "0 1 2 3 4 5 6 7 8"
-```
-
-The input parser accepts spaces, commas, or semicolons:
-
-```bash
-python3 main.py --start "8,7,6,5,4,3,2,1,0"
-python3 main.py --start "8;7;6;5;4;3;2;1;0"
-```
-
-The blank can be written as:
-
-- `0`
-- `_`
-- `blank`
-- `x`
-
-Examples:
-
-```bash
-python3 main.py --start "8 7 6 5 4 3 2 1 _"
-python3 main.py --start "8 7 6 5 4 3 2 1 blank"
-python3 main.py --start "8 7 6 5 4 3 2 1 x"
-```
-
-### All CLI Arguments
-
-| Argument | Values | Default | Meaning |
-| --- | --- | --- | --- |
-| `--algorithm` | `bfs`, `astar`, `all` | `all` | Selects which search algorithm to run. |
-| `--heuristic` | `manhattan`, `misplaced`, `zero` | `manhattan` | Selects the heuristic used by A*. |
-| `--size` | integer | `3` | Board width and height. For this assignment, keep it as `3`. |
-| `--start` | state string | assignment start | Custom start state. |
-| `--target` | state string | assignment target | Custom target state. |
-| `--show-path` | flag | off | Prints every state in the solution path. |
 
 ## Folder Structure
 
@@ -340,14 +203,9 @@ python3 main.py --start "8 7 6 5 4 3 2 1 x"
 |-- src/
 |   `-- sliding_puzzle/
 |       |-- __init__.py
-|       |-- __main__.py
 |       |-- board.py
-|       |-- cli.py
 |       |-- heuristics.py
 |       `-- search.py
-|-- tests/
-|   |-- test_board.py
-|   `-- test_search.py
 `-- web/
     |-- game.js
     |-- index.html
@@ -371,20 +229,9 @@ This is the Python package containing the solver.
 | Path | Purpose |
 | --- | --- |
 | `__init__.py` | Defines the package's public imports. |
-| `__main__.py` | Allows running the package with `python3 -m sliding_puzzle`. |
 | `board.py` | Board representation, validation, parsing, formatting, neighbors, solvability. |
-| `cli.py` | Command-line interface and default assignment puzzle. |
 | `heuristics.py` | Heuristic functions used by A*. |
 | `search.py` | BFS, A*, path reconstruction, and metric collection. |
-
-### `tests/`
-
-The tests use Python's built-in `unittest` framework.
-
-| Path | Purpose |
-| --- | --- |
-| `tests/test_board.py` | Tests state parsing, neighbor generation, solvability, and formatting. |
-| `tests/test_search.py` | Tests heuristics, BFS, A*, solution length, and unsolvable handling. |
 
 ### `presentation/`
 
@@ -506,7 +353,6 @@ SearchResult
 astar_search
 breadth_first_search
 manhattan_distance
-misplaced_tiles
 ```
 
 It also defines `__all__`, which lists what should be considered public when
@@ -519,26 +365,6 @@ from sliding_puzzle import Puzzle, astar_search
 ```
 
 No functions are defined in this file.
-
-### `src/sliding_puzzle/__main__.py`
-
-Purpose: allow this command after installation or with `PYTHONPATH=src`:
-
-```bash
-python3 -m sliding_puzzle
-```
-
-It imports the CLI `main()` function and runs it:
-
-```python
-from sliding_puzzle.cli import main
-
-if __name__ == "__main__":
-    raise SystemExit(main())
-```
-
-Return behavior is the same as `main.py`, because both call
-`sliding_puzzle.cli.main()`.
 
 ### `src/sliding_puzzle/board.py`
 
@@ -973,47 +799,6 @@ Each legal move can move only one numbered tile by one grid step. Therefore the
 total Manhattan distance cannot overestimate the minimum number of moves still
 needed.
 
-#### `misplaced_tiles(puzzle: Puzzle, state: State) -> int`
-
-Alternative admissible heuristic.
-
-Parameters:
-
-| Parameter | Type | Meaning |
-| --- | --- | --- |
-| `puzzle` | `Puzzle` | Provides the target state. |
-| `state` | `State` | State to estimate. |
-
-Return value:
-
-- Count of non-blank tiles that are not in their target positions.
-
-Example:
-
-If tile `5` is not where it should be, it adds `1` to the heuristic. The blank
-does not count.
-
-This heuristic is admissible because each misplaced tile must be moved at least
-once before the puzzle is solved.
-
-#### `zero_heuristic(puzzle: Puzzle, state: State) -> int`
-
-Testing heuristic.
-
-Parameters:
-
-| Parameter | Type | Meaning |
-| --- | --- | --- |
-| `puzzle` | `Puzzle` | Accepted to match the heuristic interface. |
-| `state` | `State` | Accepted to match the heuristic interface. |
-
-Return value:
-
-- Always `0`.
-
-This is admissible because it never overestimates. With unit move costs, A*
-with this heuristic behaves like uniform-cost search.
-
 ### `src/sliding_puzzle/search.py`
 
 Purpose: implement BFS, A*, result storage, and path reconstruction.
@@ -1299,277 +1084,6 @@ Return value:
 - A `SearchResult` with `found=False`, empty `path`, empty `moves`, and elapsed
   time calculated from `start_time`.
 
-### `src/sliding_puzzle/cli.py`
-
-Purpose: command-line interface, default assignment data, search selection, and
-result printing.
-
-#### `ASSIGNMENT_START`
-
-```python
-ASSIGNMENT_START = (8, 7, 6, 5, 4, 3, 2, 1, 0)
-```
-
-The start state from the assignment PDF.
-
-#### `ASSIGNMENT_TARGET`
-
-```python
-ASSIGNMENT_TARGET = (0, 1, 2, 3, 4, 5, 6, 7, 8)
-```
-
-The target state from the assignment PDF.
-
-#### `HEURISTICS`
-
-```python
-HEURISTICS = {
-    "manhattan": (manhattan_distance, "Manhattan distance"),
-    "misplaced": (misplaced_tiles, "Misplaced tiles"),
-    "zero": (zero_heuristic, "Zero heuristic"),
-}
-```
-
-Maps command-line heuristic names to:
-
-1. The actual Python function.
-2. A human-readable name for output.
-
-For example, `--heuristic manhattan` selects:
-
-```python
-(manhattan_distance, "Manhattan distance")
-```
-
-#### `main(argv: Sequence[str] | None = None) -> int`
-
-Main command-line function.
-
-Parameters:
-
-| Parameter | Type | Default | Meaning |
-| --- | --- | --- | --- |
-| `argv` | `Sequence[str] | None` | `None` | Optional argument list. If `None`, argparse reads from the real command line. |
-
-Return value:
-
-- `0` if all selected searches found a solution.
-- `1` if one or more selected searches did not find a solution.
-- `2` if the puzzle is unsolvable from the given start state.
-
-What it does:
-
-1. Calls `_parse_args(argv)`.
-2. Parses custom `--start` and `--target` if provided.
-3. Uses assignment defaults if no custom states are provided.
-4. Builds a `Puzzle`.
-5. Prints the title, board size, start state, and target state.
-6. Checks solvability.
-7. Runs BFS if selected.
-8. Runs A* if selected.
-9. Prints a summary table.
-10. Prints full paths if `--show-path` was passed.
-11. Returns an exit code.
-
-#### `_parse_args(argv: Sequence[str] | None) -> argparse.Namespace`
-
-Private helper that configures and runs `argparse`.
-
-Parameters:
-
-| Parameter | Type | Meaning |
-| --- | --- | --- |
-| `argv` | `Sequence[str] | None` | Optional command-line argument list. |
-
-Return value:
-
-- `argparse.Namespace` with these attributes:
-
-| Attribute | Type | Meaning |
-| --- | --- | --- |
-| `algorithm` | `str` | `bfs`, `astar`, or `all`. |
-| `heuristic` | `str` | `manhattan`, `misplaced`, or `zero`. |
-| `size` | `int` | Board size. Default `3`. |
-| `start` | `str | None` | Custom start state string. |
-| `target` | `str | None` | Custom target state string. |
-| `show_path` | `bool` | Whether to print every state in the solution path. |
-
-If the user passes invalid choices, `argparse` prints an error and exits.
-
-#### `_print_summary(results: list[SearchResult]) -> None`
-
-Prints the comparison table.
-
-Parameters:
-
-| Parameter | Type | Meaning |
-| --- | --- | --- |
-| `results` | `list[SearchResult]` | Search results to display. |
-
-Return value:
-
-- `None`
-
-Columns printed:
-
-- `Algorithm`
-- `Heuristic`
-- `Expansions`
-- `Max memory nodes`
-- `Max frontier`
-- `Moves`
-- `Time`
-
-The function calculates column widths dynamically so the table stays aligned.
-
-#### `_print_path(result: SearchResult, size: int) -> None`
-
-Prints the full solution path for one result.
-
-Parameters:
-
-| Parameter | Type | Meaning |
-| --- | --- | --- |
-| `result` | `SearchResult` | Search result whose path should be printed. |
-| `size` | `int` | Board width and height used for formatting states. |
-
-Return value:
-
-- `None`
-
-Behavior:
-
-- If `result.found` is `False`, it prints `No solution found.`
-- Otherwise, it prints the move list and every state in `result.path`.
-
-### `tests/test_board.py`
-
-Purpose: verify board utilities.
-
-#### `BoardTests.test_parse_state_accepts_blank_aliases(self) -> None`
-
-Checks that `parse_state` accepts `_` and `x` as blank aliases.
-
-Return value:
-
-- `None`
-
-Expected behavior:
-
-```python
-parse_state("1 2 _ 3 4 5 6 7 8", 3)
-```
-
-returns:
-
-```python
-(1, 2, 0, 3, 4, 5, 6, 7, 8)
-```
-
-#### `BoardTests.test_neighbors_from_corner_blank(self) -> None`
-
-Checks legal moves when the blank is in the bottom-right corner.
-
-Return value:
-
-- `None`
-
-Expected neighbors:
-
-- blank moves up
-- blank moves left
-
-#### `BoardTests.test_solvability_matches_assignment_configuration(self) -> None`
-
-Checks that the assignment start state can reach the assignment target state.
-
-Return value:
-
-- `None`
-
-#### `BoardTests.test_format_state_uses_blank_marker(self) -> None`
-
-Checks that `format_state` prints tile `0` as `_`.
-
-Return value:
-
-- `None`
-
-### `tests/test_search.py`
-
-Purpose: verify heuristics and search algorithms.
-
-#### `ASSIGNMENT_PUZZLE`
-
-Shared test puzzle using the assignment start and target states:
-
-```python
-Puzzle(
-    start=(8, 7, 6, 5, 4, 3, 2, 1, 0),
-    target=(0, 1, 2, 3, 4, 5, 6, 7, 8),
-    size=3,
-)
-```
-
-#### `SearchTests.test_manhattan_is_zero_for_target(self) -> None`
-
-Checks that the Manhattan heuristic returns `0` when the state is already the
-target.
-
-Return value:
-
-- `None`
-
-#### `SearchTests.test_misplaced_tiles_is_zero_for_target(self) -> None`
-
-Checks that the misplaced-tiles heuristic returns `0` for the target.
-
-Return value:
-
-- `None`
-
-#### `SearchTests.test_bfs_solves_assignment_puzzle(self) -> None`
-
-Checks that BFS finds a path from the assignment start state to the assignment
-target state.
-
-Return value:
-
-- `None`
-
-Assertions:
-
-- `result.found` is `True`
-- first path state equals the start
-- last path state equals the target
-- `len(result.path) == result.move_count + 1`
-
-#### `SearchTests.test_astar_matches_bfs_solution_length(self) -> None`
-
-Checks that A* finds a solution with the same move count as BFS and fewer
-expansions.
-
-Return value:
-
-- `None`
-
-This confirms that A* still finds an optimal solution while doing much less
-work.
-
-#### `SearchTests.test_unsolvable_puzzle_returns_not_found_without_searching(self) -> None`
-
-Creates an unsolvable puzzle and checks that BFS returns immediately without
-expanding nodes.
-
-Return value:
-
-- `None`
-
-Expected result:
-
-- `result.found` is `False`
-- `result.expansions` is `0`
-
 ## How The Algorithms Work
 
 ### Legal Moves
@@ -1686,47 +1200,6 @@ Conclusion:
 - BFS expands many more states because it has no information about the target.
 - A* expands far fewer states because Manhattan distance gives useful guidance.
 
-## Tests
-
-Run tests after installing the package:
-
-```bash
-python3 -m unittest discover -s tests
-```
-
-Run tests without installing the package:
-
-```bash
-PYTHONPATH=src python3 -m unittest discover -s tests
-```
-
-Windows PowerShell without installing:
-
-```powershell
-$env:PYTHONPATH = "src"
-py -3 -m unittest discover -s tests
-```
-
-Expected result:
-
-```text
-Ran 9 tests
-
-OK
-```
-
-The test suite checks:
-
-- blank parsing aliases
-- neighbor generation
-- assignment puzzle solvability
-- board formatting
-- heuristic value at target
-- BFS solving the assignment puzzle
-- A* matching BFS solution length
-- A* expanding fewer nodes than BFS
-- unsolvable puzzle early exit
-
 ## Assignment Compliance
 
 | Requirement | Where it is satisfied |
@@ -1742,22 +1215,6 @@ The test suite checks:
 | Avoid search-algorithm libraries | BFS and A* are implemented manually using `deque` and `heapq` |
 
 ## Troubleshooting
-
-### `ModuleNotFoundError: No module named 'sliding_puzzle'`
-
-This can happen when running tests before installing the package.
-
-Fix option 1: install the project:
-
-```bash
-python3 -m pip install -e .
-```
-
-Fix option 2: set `PYTHONPATH` for the test command:
-
-```bash
-PYTHONPATH=src python3 -m unittest discover -s tests
-```
 
 ### PowerShell Blocks Virtual Environment Activation
 
